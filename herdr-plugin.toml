@@ -1,0 +1,15 @@
+id = "workspace-copy"
+name = "Workspace Copy"
+version = "0.1.0"
+min_herdr_version = "0.8.0"
+description = "Copy a workspace folder to a sibling path and open it as a new Herdr workspace."
+platforms = ["macos", "linux"]
+
+[[build]]
+command = ["cargo", "build", "--release"]
+
+[[actions]]
+id = "duplicate-workspace"
+title = "Duplicate workspace folder"
+contexts = ["workspace"]
+command = ["target/release/workspace-copy", "duplicate"]

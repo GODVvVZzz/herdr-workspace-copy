@@ -1,0 +1,22 @@
+[package]
+name = "workspace-copy"
+version = "0.1.0"
+edition = "2021"
+description = "Copy a Herdr workspace folder to a sibling path and open it as a new workspace"
+license = "MIT"
+readme = "README.md"
+keywords = ["herdr", "plugin", "workspace", "terminal"]
+categories = ["command-line-utilities"]
+
+[[bin]]
+name = "workspace-copy"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
