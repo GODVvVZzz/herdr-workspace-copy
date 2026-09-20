@@ -39,13 +39,7 @@ herdr plugin enable workspace-copy
 
 ### Marketplace listing
 
-After the repository is public:
-
-1. Add the GitHub topic `herdr-plugin`
-2. Keep a valid `herdr-plugin.toml` on the default branch  
-3. Wait for the index refresh (~30 minutes) — see [Herdr plugins marketplace](https://herdr.dev/plugins/)
-
-Listing is automatic and is **not** a security review.
+To list on the [Herdr plugins marketplace](https://herdr.dev/plugins/), keep this repository public, keep a valid `herdr-plugin.toml` on the default branch, and add the GitHub topic `herdr-plugin`. Listing is automatic and is **not** a security review.
 
 ### Local development
 
