@@ -33,11 +33,9 @@ Absolute `source` and `target` paths are printed before the copy. v0.1 does not 
 ## Install
 
 ```bash
-herdr plugin install <owner>/herdr-workspace-copy --yes
+herdr plugin install GODVvVZzz/herdr-workspace-copy --yes
 herdr plugin enable workspace-copy
 ```
-
-Replace `<owner>` with the GitHub account that hosts this repository.
 
 ### Marketplace listing
 
