@@ -77,7 +77,21 @@ fn copy_dir_inner(
 }
 
 fn copy_symlink_or_file(from: &Path, to: &Path, stats: &mut CopyStats) -> Result<(), String> {
-    // v0.1: follow symlink and copy content when possible; otherwise copy the link target path file.
+    // Recreate symlinks verbatim (cp -a style): fs::copy would follow the link
+    // and fail on links pointing to directories or dangling targets.
+    let meta = fs::symlink_metadata(from)
+        .map_err(|e| format!("symlink_metadata {}: {e}", from.display()))?;
+    if meta.file_type().is_symlink() {
+        let target = fs::read_link(from)
+            .map_err(|e| format!("read_link {}: {e}", from.display()))?;
+        if fs::symlink_metadata(to).is_ok() {
+            fs::remove_file(to).map_err(|e| format!("remove {}: {e}", to.display()))?;
+        }
+        std::os::unix::fs::symlink(&target, to)
+            .map_err(|e| format!("symlink {} -> {}: {e}", to.display(), target.display()))?;
+        stats.files_copied += 1;
+        return Ok(());
+    }
     match fs::copy(from, to) {
         Ok(n) => {
             stats.files_copied += 1;

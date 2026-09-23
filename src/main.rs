@@ -43,7 +43,22 @@ fn build_plan(name_override: Option<String>, yes: bool) -> Result<(CopyPlan, Str
         .canonicalize()
         .unwrap_or(source);
 
-    let suggested = name_override.unwrap_or_else(|| context::suggested_name(&source));
+    let had_override = name_override.is_some();
+    let mut suggested = name_override.unwrap_or_else(|| context::suggested_name(&source));
+    // Plugin actions can't prompt for a new name; when the default target already
+    // exists, bump the suffix (…-copy-2, …-copy-3) instead of failing validation.
+    if !had_override && ui::running_as_plugin_action() {
+        let base = source
+            .file_name()
+            .map(|n| n.to_string_lossy().to_string())
+            .unwrap_or_else(|| "workspace".into());
+        let suffix = context::name_template_suffix();
+        let mut n = 2;
+        while sibling_dest(&source, &suggested).exists() {
+            suggested = format!("{base}{suffix}-{n}");
+            n += 1;
+        }
+    }
     let preview_dest = sibling_dest(&source, &suggested);
     let preview_plan = CopyPlan {
         source: source.clone(),
